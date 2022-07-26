@@ -109,7 +109,7 @@ module.exports = {
             for (const view of views) {
 
                 // language=SQL format=false
-                let sql = `SELECT * FROM ${view}`
+                let sql = `SELECT * FROM ${view}`;
 
                 console.log(sql)
 
@@ -143,7 +143,6 @@ module.exports = {
         // send('./files/altogiro/sync/views-4502.gz', res);
         // return;
 
-        //
         // console.log(req.body)
 
         try {
@@ -245,8 +244,8 @@ module.exports = {
         } catch (e) {
             console.log(req.body);
             console.log(e);
-
             errors.invalido_body(res);
+
         }
     },
 

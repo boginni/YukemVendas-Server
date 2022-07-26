@@ -38,13 +38,10 @@ module.exports = {
             return null;
         }
 
-
         let param = [];
         let historico = historicoPedido;
         param = [historico.pessoas];
 
-
-        console.log(historico.pessoas);
 
         let sqlHistorico = '';
 

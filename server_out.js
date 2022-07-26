@@ -7,9 +7,11 @@ const cors = require("cors");
 const app = express();
 
 app.use(express.json());
-app.use(cookieParser());
-app.use(cors());
-app.use(express.static('image'));
+
+// app.use(cookieParser());
+// app.use(cors());
+
+app.use('/image', express.static('image'));
 
 app.use(function errorHandler(err, req, res, next) {
     res.status(400)
@@ -26,41 +28,7 @@ user.register(app);
 views.register(app);
 utility.register(app);
 
-
-const config = require('./src/managers/server_controller');
-const cache = require('./src/managers/cache_manager');
-const userManager = require('./src/managers/user_manager');
-const event = require('./src/events/EventListener');
-
-config.validateServer();
-
-fs.readFile('./config/config.json', 'utf8', function (err, data) {
-
-    if (err) {
-        config.createFile();
-        return;
-    }
-
-    let configFile = JSON.parse(data);
-
-    const hostname = configFile.servidor;
-    const port = configFile.portaOut;
-
-    config.setOptions(configFile);
-
-    let server = http.createServer(app);
-    userManager.initIWebsocketServer(server);
-
-    event.startListeners();
-    cache.updateCache();
-
-
-    server.listen(port, hostname,
-        () => {
-            console.log('Running output Server');
-            console.log('host: ' + hostname);
-            console.log('port: ' + port);
-        }
-    );
-
+const serverEngine = require('./src/managers/server_engine')
+serverEngine.start(app, true, () => {
+    console.log('Output Server')
 });

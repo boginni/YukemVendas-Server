@@ -1,14 +1,14 @@
 {
   "servidor": "192.168.1.3",
   "portaOut": 11002,
-  "portaIn": 11004,
-  "portaDash" : 11005,
+  "portaIn": 11002,
+  "portaDash": 11002,
   "ambientes": [
     {
       "nome": "boginni",
       "caixaAlta": true,
       "realTimeSync": true,
-      "realTimeDelay" : 5000,
+      "realTimeDelay": 5000,
       "caminho": "N:\\Comtec\\Yukem Vendas\\database\\ALTOGIRO.FDB",
       "firebird_host": "localhost",
       "firebird_port": 3050
@@ -17,7 +17,7 @@
       "nome": "infotemp",
       "caixaAlta": true,
       "realTimeSync": true,
-      "realTimeDelay" : 5000,
+      "realTimeDelay": 5000,
       "caminho": "N:\\Comtec\\Yukem Vendas\\database\\Infotemp.FDB",
       "firebird_host": "localhost",
       "firebird_port": 3050
@@ -26,11 +26,10 @@
       "nome": "decore",
       "caixaAlta": true,
       "realTimeSync": true,
-      "realTimeDelay" : 5000,
+      "realTimeDelay": 5000,
       "caminho": "N:\\Comtec\\Yukem Vendas\\database\\ARTDECOR.FDB",
       "firebird_host": "localhost",
       "firebird_port": 3050
     }
-
   ]
 }

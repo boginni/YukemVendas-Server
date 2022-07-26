@@ -1,5 +1,6 @@
 const errors = require('../common/error');
 const dao = require('../dao/input/dao_venda');
+const queue = require("express-queue");
 
 module.exports = {
 
@@ -7,7 +8,7 @@ module.exports = {
      * @param app {Express}
      */
     register: (app) => {
-        app.post('/venda/add/', async (req, res) => {
+        app.post('/venda/add/', queue({activeLimit: 1, queuedLimit: -1}), async (req, res) => {
 
             /**
              * @type {Venda[]}

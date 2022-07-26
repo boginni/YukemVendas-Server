@@ -5,7 +5,7 @@ const daoIp = require('../../common/ip_storage');
 const seguranca = require('../../common/seguranca');
 const userManager = require('../../managers/user_manager');
 
-var crypto = require('crypto');
+const crypto = require('crypto');
 
 let sql = 'SELECT * FROM MOB_SP_YK_LOGIN(?, ?);';
 
@@ -17,19 +17,13 @@ module.exports = {
     login: (req, res) => {
 
         // REQUESTS
-        var amb = req.headers.ambiente;
-        var usuario = req.body.usuario;
-        var pass = req.body.pass;
-        var device = req.headers.device;
-        var ip = req.ip
+        const amb = req.headers.ambiente;
+        const usuario = req.body.usuario;
+        const pass = req.body.pass;
+        const device = req.headers.device;
+        let ip = req.ip;
 
-        // VALIDAÇÃO PARA EVITAR NULL
-        if (!validateLogin(amb, usuario, pass)) {
-            errors.invalido_credencial(res);
-            return;
-        }
-
-        var options = ambiente.getOptions(amb);
+        const options = ambiente.getOptions(amb);
 
         // SERVE PARA SABER SE O AMBIENTE É VÁLIDO
         if (options == null) {
@@ -102,25 +96,6 @@ module.exports = {
 
 }
 
-/**
- * @param ambiente {string}
- * @param usuario {string}
- * @param pass {string}
- * @return boolean
- */
-function validateLogin(ambiente, usuario, pass) {
-
-    if (ambiente == null) {
-        return false;
-    }
-
-    if (usuario == null) {
-        return false;
-    }
-
-    return pass != null;
-
-}
 
 
 
