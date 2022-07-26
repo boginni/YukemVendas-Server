@@ -16,21 +16,17 @@ module.exports = {
             let list = req.body;
 
             if (list.length > 0) {
-                dao.adicionar(req, res);
+                await dao.adicionar(req, res);
             } else {
-                errors.invalido_body(res,)
+                errors.invalido_body(res)
             }
 
 
         });
 
-        app.post('/venda/ping/', async (req, res) => {
-            dao.pingar(req, res);
-        });
+        app.post('/venda/ping/', dao.pingar);
 
-        app.post('/venda/sync/', async (req, res) => {
-            dao.pingar(req, res);
-        });
+        app.post('/venda/sync/', dao.pingar);
 
     }
 

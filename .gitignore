@@ -132,3 +132,8 @@ dist
 # IDE files
 
 .idea/
+
+
+# Server Files
+files/
+config/
