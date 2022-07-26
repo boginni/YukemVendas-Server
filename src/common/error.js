@@ -5,8 +5,7 @@ module.exports = {
      * @param res Response
      */
     invalido_credencial: (res) => {
-        res.status(400);
-        res.send(JSON.stringify({'error': 101}))
+        return res.status(400).end(JSON.stringify({'error': 101}))
     },
 
     /**
@@ -14,8 +13,7 @@ module.exports = {
      * @param res Response
      */
     invalido_ambiente: (res) => {
-        res.status(400);
-        res.send(JSON.stringify({'error': 102}))
+        return res.status(400).end(JSON.stringify({'error': 102}))
     },
 
     /**
@@ -23,8 +21,7 @@ module.exports = {
      * @param res Response
      */
     invalido_senha: (res) => {
-        res.status(400);
-        res.send(JSON.stringify({'error': 103}))
+        return res.status(400).end(JSON.stringify({'error': 103}))
     },
 
     /**
@@ -32,13 +29,11 @@ module.exports = {
      * @param res Response
      */
     invalido_tabela: (res) => {
-
-        if(res == null){
+        if (res == null) {
             return {'error': 104};
         }
 
-        res.status(400);
-        res.send(JSON.stringify({'error': 104}))
+        return res.status(400).end(JSON.stringify({'error': 104}))
     },
 
 
@@ -47,8 +42,7 @@ module.exports = {
      * @param res Response
      */
     invalido_body: (res) => {
-        res.status(400);
-        res.send(JSON.stringify({'error': 105}))
+        return res.status(400).end(JSON.stringify({'error': 105}))
     },
 
     /**
@@ -56,8 +50,7 @@ module.exports = {
      * @param res Response
      */
     invalido_user: (res) => {
-        res.status(400);
-        res.send(JSON.stringify({'error': 106}))
+        return res.status(400).end(JSON.stringify({'error': 106}))
     },
 
     /**
@@ -65,8 +58,7 @@ module.exports = {
      * @param res Response
      */
     erro_interno_query: (res) => {
-        res.status(400);
-        res.send(JSON.stringify({'error': 201}))
+        return res.status(400).end(JSON.stringify({'error': 201}))
     },
 
     /**
@@ -74,8 +66,7 @@ module.exports = {
      * @param res Response
      */
     erro_interno_fb: (res) => {
-        res.status(400);
-        res.send(JSON.stringify({'error': 202}))
+        return res.status(400).end(JSON.stringify({'error': 202}))
     },
 
     /**
@@ -83,8 +74,7 @@ module.exports = {
      * @param res Response
      */
     acesso_negado: (res) => {
-        res.sendStatus(403);
-        res.end();
+        return res.status(403).end();
     },
 
 }

@@ -30,7 +30,6 @@ module.exports = {
             return null;
         }
 
-
         Firebird.attach(options, async function (err, db) {
 
             if (err) {

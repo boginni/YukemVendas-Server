@@ -40,9 +40,9 @@ const visita = require('./src/routes/controller_visita')
 
 cliente.register(app)
 venda.register(app);
-utility.register(app);
-images.register(app);
-daoConfig.register(app);
+// utility.register(app);
+// images.register(app);
+// daoConfig.register(app);
 visita.register(app);
 
 
@@ -60,7 +60,6 @@ fs.readFile('./config/config.json', 'utf8', function (err, data) {
     }
 
     let configFile = JSON.parse(data);
-
 
     const hostname = configFile.servidor;
     const port = configFile.portaIn;
