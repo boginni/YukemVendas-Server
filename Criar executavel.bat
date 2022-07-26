@@ -1,0 +1,1 @@
+pkg -t node16-win-x64 server_dash.js & pkg -t node16-win-x64 server_in.js & pkg -t node16-win-x64 server_out.js 

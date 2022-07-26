@@ -1,0 +1,3 @@
+class HistoricoPedidoDet{
+    id;
+}
