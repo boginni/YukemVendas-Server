@@ -8,9 +8,7 @@ module.exports = {
      */
     register: (app) => {
 
-        app.post('/cliente/', queue({activeLimit: 1, queuedLimit: -1}), async (req, res) => {
-            daoCliente.insert(req, res);
-        });
+        app.post('/cliente/',  daoCliente.insert);
 
     }
 

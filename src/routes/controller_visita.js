@@ -5,6 +5,6 @@ const queue = require("express-queue");
 module.exports = {
     // @app Express
     register: (app) => {
-        app.post('/visita/', queue({activeLimit: 1, queuedLimit: -1}), dao_visita.insertVisita)
+        app.post('/visita/', dao_visita.insertVisita)
     }
 }

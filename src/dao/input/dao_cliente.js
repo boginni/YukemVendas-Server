@@ -5,7 +5,8 @@
 const Firebird = require("node-firebird");
 const controller = require('../../managers/server_controller');
 const errors = require('../../common/error');
-const seguranca = require('../../common/seguranca');
+
+
 // const
 const log = require("../../common/log_manager");
 
@@ -27,21 +28,8 @@ module.exports = {
          */
         let clientList = req.body;
 
-        // VALIDAÇÃO DE AMBIENTE
         let options = controller.getOptions(amb);
 
-        // SERVE PARA SABER SE O AMBIENTE É VÁLIDO
-        if (options == null) {
-            errors.invalido_ambiente(res);
-            return null;
-        }
-
-        if (!(await seguranca.checkDevice(headers))) {
-            errors.acesso_negado(res);
-            return null;
-        }
-
-        // ACESSO AO BANCO DE DADOS
         Firebird.attach(options, async function (err, db) {
 
             // ERRO INTERNO FB

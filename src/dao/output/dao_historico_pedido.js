@@ -2,7 +2,7 @@ const Firebird = require("node-firebird");
 const controller = require("../../managers/server_controller");
 const errors = require('../../common/error');
 
-const seguranca = require('../../common/seguranca');
+const seguranca = require('../../middleware/seguranca');
 
 
 fs = require('fs')

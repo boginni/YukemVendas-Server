@@ -1,7 +1,7 @@
 const Firebird = require("node-firebird");
 const ambiente = require('../../managers/server_controller');
 const errors = require('../../common/error');
-const seguranca = require('../../common/seguranca');
+const seguranca = require('../../middleware/seguranca');
 
 const {logSaveVenda} = require("../../common/log_manager");
 let logRet = [];

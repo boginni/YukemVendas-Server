@@ -2,7 +2,7 @@ const Firebird = require("node-firebird");
 const ambiente = require('../../managers/server_controller');
 const errors = require('../../common/error');
 const daoIp = require('../../common/ip_storage');
-const seguranca = require('../../common/seguranca');
+const seguranca = require('../../middleware/seguranca');
 const userManager = require('../../managers/user_manager');
 
 const crypto = require('crypto');

@@ -10,11 +10,13 @@ module.exports = {
 
     /**
      *
-     * @param app {Express}
+     * @param routes {Function}
      * @param callback {Function}
      * @param details {boolean}
      */
-    start: function (app, details, callback) {
+    start: function (details, routes, callback) {
+
+        const app = express();
 
         app.use(express.json());
 
@@ -24,6 +26,9 @@ module.exports = {
         });
 
         config.validateServer();
+
+        routes(app)
+
 
         fs.readFile('./config/config.json', 'utf8', function (err, data) {
 

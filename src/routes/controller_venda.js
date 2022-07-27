@@ -8,7 +8,7 @@ module.exports = {
      * @param app {Express}
      */
     register: (app) => {
-        app.post('/venda/add/', queue({activeLimit: 1, queuedLimit: -1}), async (req, res) => {
+        app.post('/venda/add/',  async (req, res) => {
 
             /**
              * @type {Venda[]}

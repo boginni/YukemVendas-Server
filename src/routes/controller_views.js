@@ -2,6 +2,8 @@ const daoView = require('../dao/output/dao_view');
 const errors = require('../common/error');
 const fs = require('fs')
 
+const seguranca = require("../middleware/seguranca");
+
 
 module.exports = {
 
@@ -9,6 +11,12 @@ module.exports = {
      * @param app {Express}
      */
     register: (app) => {
+
+        app.post('/view/ping', async (req, res) => {
+            res.end('ok');
+        });
+
+        app.post('/view/buffed', seguranca.checkDevice, daoView.getViewContent);
 
         // app.post('/view/info', async (req, res) => {
         //     /**
@@ -33,12 +41,6 @@ module.exports = {
         //     }
         //
         // });
-
-        app.post('/view/ping', async (req, res) => {
-            res.end('ok');
-        });
-
-        app.post('/view/buffed', daoView.getViewContent);
 
     }
 

@@ -3,7 +3,8 @@ const daoUser = require('../dao/output/dao_login');
 const {body, header} = require("express-validator");
 
 const validator = require('../middleware/validator')
-
+const {checkRequest} = require("../common/debugger");
+const express = require('express');
 
 module.exports = {
     /**
@@ -12,7 +13,7 @@ module.exports = {
      * Rota para Fazer login
      */
     register: (app) => {
-        app.post('/login/', checkLogin, validator.form_validation, daoUser.login)
+        app.post('/login/', checkLogin, validator.validation_form, daoUser.login)
     }
 }
 

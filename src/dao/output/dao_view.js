@@ -3,7 +3,7 @@ const Firebird = require("node-firebird");
 const serverConfig = require("../../managers/server_controller");
 const errors = require('../../common/error');
 const query = require('../../common/query_buffer');
-const seguranca = require('../../common/seguranca');
+const seguranca = require('../../middleware/seguranca');
 
 const fs = require('fs');
 
@@ -148,28 +148,13 @@ module.exports = {
         try {
 
             let ambiente = req.headers.ambiente;
-
             let options = serverConfig.getOptions(ambiente);
-
-            if (options === null) {
-                errors.invalido_ambiente(res);
-                return null;
-            }
-
-            if (!(await seguranca.checkDevice(req.headers))) {
-                errors.acesso_negado(res);
-                return null;
-            }
-
-            // if (!(await seguranca.checkDevice(req.headers))) {
-            //     errors.acesso_negado(res);
-            //     return null;
-            // }
 
             /**
              *
              * @type {{}}
              */
+
             let normalViews = req.body.views.normal;
             let rotaViews = req.body.views.rota;
             let rota = req.body.rota;
@@ -179,7 +164,6 @@ module.exports = {
             // console.log(req.body)
 
             console.log(`(${vendedor}) - View Request`)
-
 
             Firebird.attach(options, async (err, db) => {
 
