@@ -14,7 +14,7 @@ module.exports = {
      * @param callback {Function}
      * @param details {boolean}
      */
-    start: function (details, routes, callback) {
+    start: function (details, server, routes, callback) {
 
         const app = express();
 
@@ -40,7 +40,7 @@ module.exports = {
             let configFile = JSON.parse(data);
 
             const hostname = configFile.servidor;
-            const port = configFile.portaOut;
+            const port = configFile[server];
 
             config.setOptions(configFile);
 

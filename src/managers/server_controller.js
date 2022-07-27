@@ -1,24 +1,11 @@
 const fs = require("fs");
+const confFile = require('../objects/config_file')
 
 /**
  * @type ServerConfig
  */
 var configFile = {};
 
-const configJsonFile =
-    '{\n ' +
-    '"servidor": "localhost",\n ' +
-    '"porta": 11002,\n ' +
-    '"ambientes":\n  ' +
-    '[\n   ' +
-    '{\n\t' +
-    '"nome": "ambiente",\n\t' +
-    '"caminho": "D:\\DIRETÓRIO\\BANCODEDADOS.FDB", \n\t' +
-    '"firebird_host" : "localhost",\n\t' +
-    '"firebird_port" : 3050\n\t' +
-    '}\n  ' +
-    ']\n' +
-    '}'
 
 const serverDir = [
     "./config",
@@ -27,11 +14,12 @@ const serverDir = [
     "./ambientes"
 ]
 
-function getServerConfig(){
+
+function getServerConfig() {
     return configFile;
 }
 
-function setServerConfig(variable){
+function setServerConfig(variable) {
     configFile = variable;
 }
 
@@ -101,7 +89,11 @@ module.exports = {
     },
 
     createFile: () => {
-        fs.writeFile('./config/config.json', configJsonFile, function (err) {
+
+        let file = new confFile.configFile();
+        file.ambientes.push(new confFile.firebirdConfig())
+
+        fs.writeFile('./config/config.json', JSON.stringify(file, null, 4), function (err) {
             if (err) throw err;
             console.log('Criado Arquivo de configuração');
         });
