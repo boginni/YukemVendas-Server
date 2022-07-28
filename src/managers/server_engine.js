@@ -6,6 +6,20 @@ const event = require("../events/EventListener");
 const cache = require("./cache_manager");
 const express = require("express");
 
+
+const winston = require('winston');
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    defaultMeta: {service: 'user-service'},
+    transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({filename: 'combined.log'}),
+    ],
+});
+
+
 module.exports = {
 
     /**
@@ -16,8 +30,15 @@ module.exports = {
      */
     start: function (details, routes, callback) {
 
-        const app = express();
 
+        // if (process.env.NODE_ENV !== 'production') {
+        //     logger.add(new winston.transports.Console({
+        //         format: winston.format.simple(),
+        //     }));
+        // }
+
+        const app = express();
+        
         app.use(express.json());
 
         app.use(function errorHandler(err, req, res, next) {
@@ -28,6 +49,8 @@ module.exports = {
         config.validateServer();
 
         routes(app)
+
+        logger.info('teste')
 
 
         fs.readFile('./config/config.json', 'utf8', function (err, data) {
