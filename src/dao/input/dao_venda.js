@@ -19,17 +19,6 @@ module.exports = {
 
         var options = ambiente.getOptions(headers.ambiente);
 
-        // SERVE PARA SABER SE O AMBIENTE É VÁLIDO
-        if (options == null) {
-            errors.invalido_ambiente(res);
-            return null;
-        }
-
-        if (!(await seguranca.checkDevice(headers))) {
-            errors.acesso_negado(res);
-            return null;
-        }
-
         Firebird.attach(options, async function (err, db) {
 
             if (err) {
@@ -132,17 +121,6 @@ module.exports = {
         let headers = req.headers;
 
         var options = ambiente.getOptions(headers.ambiente);
-
-        // SERVE PARA SABER SE O AMBIENTE É VÁLIDO
-        if (options == null) {
-            errors.invalido_ambiente(res);
-            return null;
-        }
-
-        if (!(await seguranca.checkDevice(headers))) {
-            errors.acesso_negado(res);
-            return null;
-        }
 
 
         Firebird.attach(options, async function (err, db) {

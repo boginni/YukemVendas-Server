@@ -28,7 +28,7 @@ module.exports = {
      * @param callback {Function}
      * @param details {boolean}
      */
-    start: function (details, server, routes, callback) {
+    start: function (details, serverReference, routes, callback) {
 
 
         // if (process.env.NODE_ENV !== 'production') {
@@ -63,7 +63,7 @@ module.exports = {
             let configFile = JSON.parse(data);
 
             const hostname = configFile.servidor;
-            const port = configFile[server];
+            const port = configFile[serverReference];
 
             config.setOptions(configFile);
 

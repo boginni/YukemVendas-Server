@@ -20,17 +20,6 @@ module.exports = {
         let options = ambiente.getOptions(headers.ambiente);
 
         // SERVE PARA VERIFICAR SE O AMBIENTE É VÁLIDO
-        if (options == null) {
-            errors.invalido_ambiente(res);
-            return null;
-        }
-
-
-        if (!(await seguranca.checkDevice(headers))) {
-            errors.acesso_negado(res);
-            return
-        }
-
 
         let visitaList = req.body;
 
