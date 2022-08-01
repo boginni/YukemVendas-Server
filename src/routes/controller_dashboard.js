@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require("express");
 
+const flutter = path.join(__dirname, './public-flutter/');
+
 module.exports = {
 
     /**
@@ -14,9 +16,7 @@ module.exports = {
      */
     register: (app) => {
 
-        const path = require("path");
-        const flutter = path.join(__dirname, './public-flutter/');
-        console.log(flutter);
+
         app.use('', cookieParser, cors, express.static('public-flutter'));
 
         app.post('/dash/vendas/', async (req, res) => {
@@ -28,6 +28,11 @@ module.exports = {
         });
 
         app.post('/dash/periodo/vendas/', async (req, res) => {
+            dash.getPeriodoVendas(req, res);
+        });
+
+
+        app.post('/dash/critica/', async (req, res) => {
             dash.getPeriodoVendas(req, res);
         });
 

@@ -14,22 +14,7 @@ module.exports = {
      */
     adicionar: async (req, res) => {
 
-
-        let headers = req.headers;
-
-        var options = ambiente.getOptions(headers.ambiente);
-
-        // SERVE PARA SABER SE O AMBIENTE É VÁLIDO
-        if (options == null) {
-            errors.invalido_ambiente(res);
-            return null;
-        }
-
-        if (!(await seguranca.checkDevice(headers))) {
-            errors.acesso_negado(res);
-            return null;
-        }
-
+        let options = ambiente.getOptions(req.headers.ambiente);
 
         Firebird.attach(options, async function (err, db) {
 
@@ -56,7 +41,6 @@ module.exports = {
                 ret.det = [];
 
                 // Adiciona o item
-
                 let vendaTest = await vendaExiste(db, venda.cab.uuid);
 
                 if (vendaTest != null) {
@@ -112,8 +96,8 @@ module.exports = {
                 })
 
                 if (vendaInserida) {
-                    logSaveVenda(venda, headers.ambiente);
-                    await verificaVenda(db, ret.cab.id);
+                    logSaveVenda(venda, req.headers.ambiente);
+                    // await verificaVenda(db, ret.cab.id);
                     retList[venda.cab.uuid] = ret.cab.id;
                 }
 
@@ -150,11 +134,10 @@ module.exports = {
 
 
             db.query('select * from MOB_CONF_AMBIENTE a where a.id = 42', [], (err1, result) => {
-                    db.detach();
-                    res.status(200);
-                    res.send(result[0]['VALOR']);
-                }
-            )
+                db.detach();
+                res.status(200);
+                res.send(result[0]['VALOR']);
+            })
 
 
         });
@@ -193,28 +176,26 @@ async function vendaExiste(db, uuid) {
 
 
 /**
- * @param db {Database}
+ * @param db {Firebird.Database}
  * @param cab {VendaCab}
  * @return {Promise<int>}
  */
 async function insertVendaCab(db, cab) {
     return await new Promise((resolve) => {
 
-        let param = [cab.uuid, cab.idvendedor, cab.idcliente,  cab.idformaPagamento,  cab.valorentrada, cab.datapreventrega, cab.observacaoentrega,  cab.observacao];
+        let param = [cab.uuid, cab.idvendedor, cab.idcliente, cab.idformaPagamento, cab.idtabela, cab.valorentrada, cab.datapreventrega, cab.observacaoentrega.toString(), cab.observacao.toString()];
 
         db.query(sqlCab, param, function (err, result) {
             if (err) {
                 console.log(err);
-                resolve('error');
+                return resolve('error');
             } else {
 
-                if (result.length === 0) {
+                if (result == null) {
                     resolve('noti');
                 } else {
-                    resolve(result[0]['ID']);
+                    resolve(result['ID']);
                 }
-
-
             }
         });
 
@@ -222,7 +203,7 @@ async function insertVendaCab(db, cab) {
 }
 
 /**
- * @param db {Database}
+ * @param db {Firebird.Database}
  * @param idPedido {int}
  * @param det {VendaDet}
  * @return {Promise<null>}
@@ -230,17 +211,20 @@ async function insertVendaCab(db, cab) {
 async function insertVendaDet(db, idPedido, det) {
     return await new Promise((resolve) => {
 
-        let param = [idPedido, det.ID_EMPRESA, det.ID_PRODUTO, det.ID_VENDEDOR, det.QUANTIDADE, det.VALOR_UNITARIO, det.VALOR_TOTAL, det.VALOR_DESCONTO, det.OBSERVACAO, det.A_BRINDE];
+         //          (UUID, ID_PEDIDO, ID_PRODUTO, STATUS_BRINDE, QUANTIDADE, VALOR_UNITARIO, VALOR_DESCONTO)
 
+        let param = ['', idPedido, det.ID_PRODUTO, det.A_BRINDE, det.QUANTIDADE, det.VALOR_UNITARIO, det.VALOR_DESCONTO];
 
         db.query(sqlDet, param, function (err, result) {
 
             if (err) {
+
                 console.log(err);
                 errors.erro_interno_query(res);
-                resolve();
+                return resolve();
+
             }
-            resolve(result[0]);
+            resolve(result['ID']);
 
         });
 
@@ -276,10 +260,9 @@ async function verificaVenda(db, idPedido) {
 }
 
 const sqlVerifica = 'select RESULT from SP_VERICA_VALOR_VENDA_CAB(?, 1);';
-const sqlVendaExiste = 'select id from FAT_VENDA_CAB f where f.id_integracao = ?';
+const sqlVendaExiste = 'select ID from MOB_SYNC_PEDIDO where UUID = ?';
 //
-const sqlCab = 'INSERT INTO MOB_SYNC_PEDIDO (UUID, ID_USER, ID_CLIENTE, ID_FORMA_PAGAMENTO, VALOR_ENTRADA, DATA_ENTREGA, OBSERVACAO_ENTREGA, OBSERVACAO_NOTA) VALUES (?,?,?,?,?,?,?,?);';
-const sqlDet = 'INSERT INTO MOB_SYNC_PEDIDO_ITEM (UUID, ID_PEDIDO, ID_PRODUTO, STATUS_BRINDE, VALOR_ORIGINAL, VALOR_DESCONTO) VALUES ( ?, ?, ?, ?, ?, ?);';
-
+const sqlCab = 'INSERT INTO MOB_SYNC_PEDIDO (UUID, ID_USER, ID_CLIENTE, ID_FORMA_PAGAMENTO, ID_TABELA, VALOR_ENTRADA, DATA_ENTREGA, OBSERVACAO_ENTREGA, OBSERVACAO_NOTA) VALUES (?,?,?,?,?,?,?,?,?) returning ID;';
+const sqlDet = 'INSERT INTO MOB_SYNC_PEDIDO_ITEM (UUID, ID_PEDIDO, ID_PRODUTO, STATUS_BRINDE, QUANTIDADE, VALOR_UNITARIO, VALOR_DESCONTO) VALUES ( ?, ?, ?, ?, ?, ?, ?) returning ID;';
 
 

@@ -27,6 +27,7 @@ module.exports = {
      * @param routes {Function}
      * @param callback {Function}
      * @param details {boolean}
+     * @param serverReference
      */
     start: function (details, serverReference, routes, callback) {
 
@@ -38,8 +39,9 @@ module.exports = {
         // }
 
         const app = express();
-        
-        app.use(express.json());
+
+        app.use(express.json({limit: '50mb'}));
+        app.use(express.urlencoded({limit: '50mb'}));
 
         app.use(function errorHandler(err, req, res, next) {
             res.status(400)

@@ -34,9 +34,6 @@ module.exports = {
         // Converte a senha para MD5
         let hash = crypto.createHash('md5').update(usuario + pass).digest('hex');
 
-
-        console.log(hash)
-
         Firebird.attach(options, function (err, db) {
 
             // Problemas de conexão
