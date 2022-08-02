@@ -40,7 +40,7 @@ module.exports = {
     /**
      * @param ambienteConfigs {ServerConfig}
      */
-    setOptions: (ambienteConfigs) => {
+    setOptions: (ambienteConfigs, print = false) => {
 
         let ambientes = ambienteConfigs.ambientes
 
@@ -68,7 +68,9 @@ module.exports = {
             options.caixaAlta = ambiente.caixaAlta;
             options.realTimeSync = ambiente.realTimeSync;
 
-            console.log(`${ambiente.nome} Registrado`);
+            if (print) {
+                console.log(`${ambiente.nome} Registrado`);
+            }
 
             configs[ambiente.nome] = options;
         }

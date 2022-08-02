@@ -1,6 +1,6 @@
 const Firebird = require("node-firebird");
 const ambiente = require('./server_controller');
-
+const util = require('../common/utility')
 const segundo = 1000;
 
 const minuto = segundo * 60;
@@ -22,16 +22,24 @@ module.exports = {
 
         for (const amb of ambiente.getAmbientes()) {
 
+            setInterval(
+                function () {
+                    sincronizarPedidos(amb);
+                }, (minuto));
+
             setTimeout(
                 function () {
 
                     console.log(`Atualizando cache em ${amb}`)
                     atualizarCache(amb);
 
+
                     setInterval(
                         function () {
                             atualizarCache(amb);
                         }, (hora * 6));
+
+
                 }, 5 * segundo + minuto * i
             );
 
@@ -57,6 +65,12 @@ function salvarTitulos(amb) {
 /** @amb {String} */
 function salvarHistorico(amb) {
     executar(amb, 'Historico', 'EXECUTE PROCEDURE SP_MOB_SALVAR_HISTORICO_PEDIDO(?, ?);', [5, null])
+}
+
+
+/** @amb {String} */
+function sincronizarPedidos(amb) {
+    executar(amb, 'Sync Pedidos', 'SELECT * FROM mob_sp_sync_pedido;', [])
 }
 
 
@@ -86,7 +100,7 @@ function executar(amb, apelido, procedure, params) {
             if (err) {
                 console.log('Erro na procedure ' + apelido + ' em ' + amb);
             } else {
-                console.log(`Atualizada ${apelido} do ${amb}`);
+                console.log(`${util.timeUtility.getLogTime()} Atualizada ${apelido} do ${amb}`);
             }
 
 
@@ -114,5 +128,6 @@ function atualizarCache(amb) {
             salvarTitulos(amb);
         }, 10 * segundo * i
     );
+
 
 }

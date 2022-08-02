@@ -5,19 +5,9 @@ const userManager = require("./user_manager");
 const event = require("../events/EventListener");
 const cache = require("./cache_manager");
 const express = require("express");
+const cluster = require("cluster");
 
-
-const winston = require('winston');
-
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    defaultMeta: {service: 'user-service'},
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({filename: 'combined.log'}),
-    ],
-});
+const totalCPUs = require("os").cpus().length;
 
 
 module.exports = {
@@ -32,42 +22,39 @@ module.exports = {
     start: function (details, serverReference, routes, callback) {
 
 
-        // if (process.env.NODE_ENV !== 'production') {
-        //     logger.add(new winston.transports.Console({
-        //         format: winston.format.simple(),
-        //     }));
-        // }
-
         const app = express();
 
-        app.use(express.json({limit: '50mb'}));
-        app.use(express.urlencoded({limit: '50mb'}));
+        if (cluster.isMaster) {
 
-        app.use(function errorHandler(err, req, res, next) {
-            res.status(400)
-            res.send('error ' + err.message);
-        });
+            console.log(`Number of CPUs is ${totalCPUs}`);
+            console.log(`Master ${process.pid} is running`);
 
-        config.validateServer();
-
-        routes(app)
-
-        logger.info('teste')
-
-
-        fs.readFile('./config/config.json', 'utf8', function (err, data) {
-
-            if (err) {
-                config.createFile();
-                return;
+            for (let i = 0; i < totalCPUs; i++) {
+                cluster.fork();
             }
 
-            let configFile = JSON.parse(data);
+            cluster.on("exit", (worker, code, signal) => {
+                console.log(`worker ${worker.process.pid} died`);
+                console.log("Let's fork another worker!");
+                cluster.fork();
+            });
 
+
+
+
+
+            let data = fs.readFileSync('./config/config.json', 'utf8');
+            let configFile = JSON.parse(data);
             const hostname = configFile.servidor;
             const port = configFile[serverReference];
-
+            config.validateServer();
             config.setOptions(configFile);
+            console.log('host: ' + hostname);
+            console.log('port: ' + port);
+
+
+
+            callback();
 
             let server = http.createServer(app);
 
@@ -77,17 +64,42 @@ module.exports = {
                 cache.updateCache();
             }
 
+        } else {
+            console.log(`Worker ${process.pid} started`);
+
+            app.use(express.json({limit: '50mb'}));
+
+            // app.use(express.urlencoded());
+
+            app.use(function errorHandler(err, req, res, next) {
+                res.status(400)
+                res.send('error ' + err.message);
+            });
+
+            routes(app)
+
+            let data = fs.readFileSync('./config/config.json', 'utf8');
+
+            let configFile = JSON.parse(data);
+            const hostname = configFile.servidor;
+            const port = configFile[serverReference];
+
+            config.setOptions(configFile);
+
+            let server = http.createServer(app);
+
+            if (details) {
+                userManager.initIWebsocketServer(server);
+            }
 
             server.listen(port, hostname,
                 () => {
-                    console.log('host: ' + hostname);
-                    console.log('port: ' + port);
 
-                    callback();
                 }
             );
 
-        });
+
+        }
 
 
     }

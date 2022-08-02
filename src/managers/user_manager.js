@@ -39,7 +39,6 @@ module.exports = {
      */
     initIWebsocketServer: (server) => {
 
-        console.log('Iniciando IO server');
 
         // let ambientes = config.getAmbientes();
         //
