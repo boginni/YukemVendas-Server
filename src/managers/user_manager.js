@@ -20,7 +20,7 @@ module.exports = {
      * @param user {Credencial}
      */
     addUser: (user) => {
-        console.log(user.user + '(' + user.idVendedor + ') conectado - ' + user.ambiente +' - ip ['+ user.ip +']');
+        console.log(user.user + '(' + user.idVendedor + ') conectado - ' + user.ambiente + ' - ip [' + user.ip + ']');
         users[user.ambiente + user.idVendedor] = user.lastUUID;
     },
 

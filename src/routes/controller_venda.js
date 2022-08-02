@@ -1,9 +1,7 @@
 const errors = require('../common/error');
 const dao = require('../dao/input/dao_venda');
 const daoSync = require('../dao/input/dao_venda_sync');
-const queue = require("express-queue");
 const seguranca = require("../middleware/seguranca");
-const {header, body} = require("express-validator");
 
 module.exports = {
 

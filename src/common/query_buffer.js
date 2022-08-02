@@ -6,7 +6,7 @@ const e = require("express");
 module.exports = {
     /**
      *
-     * @param options {options}
+     * @param options {FirebirdConfig}
      * @param tbName {string}
      * @param sql {string}
      * @param connErr {function(connErr)}
@@ -49,6 +49,8 @@ module.exports = {
                 for (const item of result) {
                     resultSet['columns'].push(item['RDB$FIELD_NAME'].trim());
                 }
+
+
                 db.sequentially(sql, param, (row, index) => {
                     resultSet['rows'].push(row);
                 }, sqlErr => {

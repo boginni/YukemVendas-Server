@@ -70,11 +70,10 @@ function salvarHistorico(amb) {
 
 /** @amb {String} */
 function sincronizarPedidos(amb) {
-    executar(amb, 'Sync Pedidos', 'SELECT * FROM mob_sp_sync_pedido;', [])
+    executar(amb, 'Sync Pedidos', 'SELECT * FROM mob_sp_sync_pedido;', [], false)
 }
 
-
-function executar(amb, apelido, procedure, params) {
+function executar(amb, apelido, procedure, params, print = true) {
 
     // console.log(`Iniciado ${apelido} para ` + amb);
     var options = ambiente.getOptions(amb);
@@ -100,7 +99,9 @@ function executar(amb, apelido, procedure, params) {
             if (err) {
                 console.log('Erro na procedure ' + apelido + ' em ' + amb);
             } else {
-                console.log(`${util.timeUtility.getLogTime()} Atualizada ${apelido} do ${amb}`);
+                if (print) {
+                    console.log(`${util.timeUtility.getLogTime()} Atualizada ${apelido} do ${amb}`);
+                }
             }
 
 
