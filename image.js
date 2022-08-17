@@ -13,7 +13,7 @@ for (const ambiente of config.getAmbientes()) {
     let options = config.getOptions(ambiente)
     Firebird.attach(options, async function (err, db) {
 
-        db.query('select * from cp_produto_foto;', [], async (err1, result) => {
+        db.query('select * from cp_produto_foto a where a.item = 1;', [], async (err1, result) => {
 
             let filePath = `image/${ambiente}/`;
 
@@ -28,8 +28,7 @@ for (const ambiente of config.getAmbientes()) {
                 await new Promise(resolve => {
                     row['FOTO'](function (err, name, e) {
 
-                        if (err)
-                            throw err;
+                        if (err) throw err;
 
                         let data = [];
 
@@ -39,10 +38,17 @@ for (const ambiente of config.getAmbientes()) {
 
                         e.on('end', function () {
 
-                            sharp(Buffer.from(data)).toFile(`${filePath}${row['ID_PRODUTO']}-${row['ITEM']}.png`).then((_) => {
+
+                            let path = `${filePath}${row['ID_PRODUTO']}`;
+                            let pathOriginal = `${path}.png`;
+                            let pathIcon = path + '-icon.png';
+
+                            sharp(Buffer.from(data)).toFile(pathOriginal).then((_) => {
+
+                                sharp(pathOriginal).resize(128, 128).toFile(pathIcon, (err, resizeImage) => {
                                     resolve();
-                                }
-                            )
+                                });
+                            })
 
 
                         });
