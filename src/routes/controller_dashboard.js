@@ -11,6 +11,8 @@ const {validation_form} = require("../middleware/validator");
 
 
 const critica = require('../dao/dashboard/dao_critica_vendedor')
+const statusPedido = require('../dao/dashboard/dao_status_pedidos')
+const metaVendedor = require('../dao/dashboard/dao_meta_vendedor')
 
 let bodyCheck = [
     body('id_vendedor')
@@ -50,8 +52,11 @@ module.exports = {
         // });
 
 
-        app.post('/dash/critica/',  seguranca.checkDevice, bodyCheck, validation_form, critica.selectData);
+        app.post('/dash/critica/', seguranca.checkDevice, bodyCheck, validation_form, critica.selectData);
 
+        app.post('/dash/status/pedido/', seguranca.checkDevice, bodyCheck, validation_form, statusPedido.selectData);
+
+        app.post('/dash/meta/vendedor/', seguranca.checkDevice, bodyCheck, validation_form, metaVendedor.selectData);
 
     }
 

@@ -1,62 +1,32 @@
-const express = require("express");
-const cluster = require("cluster");
-const totalCPUs = require("os").cpus().length;
+let Firebird = require("node-firebird");
+
+let options = {};
+
+options.host = 'localhost';
+options.port = '3050';
+options.database = "N:\\Comtec\\Yukem Vendas\\database\\ALTOGIRO.FDB";
+options.user = 'LIVE';
+options.password = 'MasterLIVE';
+options.lowercase_keys = false; // set to true to lowercase keys
+options.role = null;            // default
+options.pageSize = 4096;        // default when creating database
+options.retryConnectionInterval = 1000;
 
 
-const port = 3000;
+Firebird.attach(options, function (err, db) {
 
-
-if (cluster.isMaster) {
-
-    console.log(`Number of CPUs is ${totalCPUs}`);
-    console.log(`Master ${process.pid} is running`);
-
-    // Fork workers.
-    for (let i = 0; i < totalCPUs; i++) {
-        cluster.fork();
+    if (err) {
+        console.log(err)
+        return;
     }
 
-    cluster.on("exit", (worker, code, signal) => {
-        console.log(`worker ${worker.process.pid} died`);
-        console.log("Let's fork another worker!");
-        cluster.fork();
-    });
+    db.query('select * from DASH_VW_META_VENDA_VENDEDOR', [], (err, result) => {
+        db.detach();
 
-
-
-
-
-} else {
-    const app = express();
-    console.log(`Worker ${process.pid} started`);
-    let requests = 0;
-
-
-    let intervalId = setInterval(() => {
-        console.log(`threads ${process.pid} = ${requests}`);
-    }, 2500);
-
-
-    app.get("/", (req, res) => {
-        requests++;
-        res.end("Hello World!");
-
-    });
-
-    app.get("/api/:n", function (req, res) {
-        let n = parseInt(req.params.n);
-        let count = ' ';
-
-        if (n > 5000000000) n = 5000000000;
-
-        for (let i = 0; i <= n; i++) {
-            count += i + ' ';
+        if (err) {
+            console.log(err)
         }
+        console.log(result);
+    })
 
-        res.send(`Final count is ${count}`);
-    });
-
-    app.listen(port, () => {
-        console.log(`App listening on port ${port}`);
-    });
-}
+});

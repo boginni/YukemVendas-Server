@@ -174,6 +174,7 @@ module.exports = {
 
                 for (let view in normalViews) {
                     if (allowedViews[view]) {
+
                         // language=SQL format=false
                         let sql = `SELECT * FROM ${view}`;
                         let param = normalViews[view];

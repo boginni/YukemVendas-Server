@@ -117,25 +117,7 @@ module.exports = {
     },
 
     pingar: async (req, res) => {
-
-        let headers = req.headers;
-
-        var options = ambiente.getOptions(headers.ambiente);
-
-
-        Firebird.attach(options, async function (err, db) {
-
-
-            db.query('select * from MOB_CONF_AMBIENTE a where a.id = 42', [], (err1, result) => {
-                    db.detach();
-                    res.status(200);
-                    res.send(result[0]['VALOR']);
-                }
-            )
-
-
-        });
-
+        res.status(200).end('ok');
     },
 
 }

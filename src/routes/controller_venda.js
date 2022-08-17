@@ -10,8 +10,7 @@ module.exports = {
      */
     register: (app) => {
         app.post('/venda/add/', seguranca.checkDevice, checkBody, daoSync.adicionar);
-
-        app.post('/venda/ping/', seguranca.checkDevice, dao.pingar);
+        app.post('/venda/ping/', dao.pingar);
     }
 
 }

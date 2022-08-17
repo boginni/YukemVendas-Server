@@ -1,1 +1,1 @@
-pkg -t node16-win-x64 server.js 
+pkg -t node16-win-x64 server.js & pkg -t node16-win-x64 image.js

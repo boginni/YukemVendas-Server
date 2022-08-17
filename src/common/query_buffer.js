@@ -35,6 +35,10 @@ module.exports = {
                 return;
             }
 
+
+            // console.log(sql)
+            // console.log(param)
+
             db.query(sqlColumn, [tbName], (tbErr, result) => {
 
 
