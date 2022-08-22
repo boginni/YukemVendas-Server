@@ -26,42 +26,43 @@ module.exports = {
 
         if (cluster.isMaster) {
 
-            console.log(`Number of CPUs is ${totalCPUs}`);
-            console.log(`Master ${process.pid} is running`);
+            try {
+                console.log(`Number of CPUs is ${totalCPUs}`);
+                console.log(`Master ${process.pid} is running`);
 
-            for (let i = 0; i < totalCPUs; i++) {
-                cluster.fork();
-            }
+                let data = fs.readFileSync('./config/config.json', 'utf8');
+                let configFile = JSON.parse(data);
+                const hostname = configFile.servidor;
+                const port = configFile[serverReference];
 
-            cluster.on("exit", (worker, code, signal) => {
-                console.log(`worker ${worker.process.pid} died`);
-                console.log("Let's fork another worker!");
-                cluster.fork();
-            });
-
-
+                config.setOptions(configFile);
+                console.log('host: ' + hostname);
+                console.log('port: ' + port);
 
 
+                for (let i = 0; i < totalCPUs; i++) {
+                    cluster.fork();
+                }
 
-            let data = fs.readFileSync('./config/config.json', 'utf8');
-            let configFile = JSON.parse(data);
-            const hostname = configFile.servidor;
-            const port = configFile[serverReference];
-            config.validateServer();
-            config.setOptions(configFile);
-            console.log('host: ' + hostname);
-            console.log('port: ' + port);
+                cluster.on("exit", (worker, code, signal) => {
+                    console.log(`worker ${worker.process.pid} died`);
+                    console.log("Let's fork another worker!");
+                    cluster.fork();
+                });
 
 
+                callback();
 
-            callback();
+                let server = http.createServer(app);
 
-            let server = http.createServer(app);
-
-            if (details) {
-                userManager.initIWebsocketServer(server);
-                event.startListeners();
-                cache.updateCache();
+                if (details) {
+                    userManager.initIWebsocketServer(server);
+                    event.startListeners();
+                    cache.updateCache();
+                }
+            } catch (e) {
+                config.validateServer();
+                config.createFile();
             }
 
         } else {

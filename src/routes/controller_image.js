@@ -9,12 +9,11 @@ module.exports = {
     // @app Express
     register: (app) => {
 
-        // app.get('/image/*', (req, res) => {
-        //     dao_imagens.getImagens(req.url, res);
-        // })
+        app.get('/image/*', (req, res) => {
+            dao_imagens.getImagens(req.url, res);
+        })
 
         app.post('/upload/', async (req, res) => {
-
             upload(req, res, function (err) {
 
                 if (err != null) {
@@ -52,7 +51,7 @@ module.exports = {
 
         })
 
-        app.use('/image', express.static('image'));
+        // app.use('/image', express.static('image'));
 
     }
 
