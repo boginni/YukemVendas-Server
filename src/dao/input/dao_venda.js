@@ -117,7 +117,7 @@ module.exports = {
     },
 
     pingar: async (req, res) => {
-        res.status(200).end('ok');
+        res.status(200).end('1');
     },
 
 }
