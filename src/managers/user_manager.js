@@ -40,11 +40,7 @@ module.exports = {
     initIWebsocketServer: (server) => {
 
 
-        // let ambientes = config.getAmbientes();
-        //
-        // for (let key in ambientes) {
-        //     socketManager[ambientes[key]] = [];
-        // }
+
 
         let wss = new WebSocket.Server({server: server})
         /**
@@ -62,24 +58,20 @@ module.exports = {
 
                 try {
                     webEvent(JSON.parse(msg.data), socket)
+
                 } catch (e) {
                     console.log('invalid json');
-
                     console.log(msg.data);
-
-
                 }
 
             }
             socket.on('close', function () {
+                console.log('closing', socketManager.length)
                 socketManager = socketManager.filter(s => s !== socket);
             });
 
         }
-
-
         wss.on('connection', event);
-
 
     },
 
@@ -97,7 +89,13 @@ module.exports = {
      */
     sendData: (msg) => {
         let data = JSON.stringify(msg)
-        socketManager.forEach(s => s.send(data));
+        console.log(`Call at ${process.pid}`);
+
+        socketManager.forEach(s => {
+            console.log('test')
+            s.send(data)
+
+        });
     }
 
 }
@@ -109,7 +107,9 @@ module.exports = {
  */
 function webEvent(msg, socket) {
 
-    switch (msg.name) {
+    let evn = msg.name;
+
+    switch (evn) {
         case 'register':
             register(msg, socket)
             break;
@@ -128,12 +128,11 @@ function webEvent(msg, socket) {
  */
 function register(msg, socket) {
 
+
     // let ambiente = msg.data.ambiente
     // console.log(ambiente);
-
     socketManager = socketManager.filter(s => s !== socket);
     socketManager.push(socket);
-
     // if (socketManager != null) {
     // }
 
