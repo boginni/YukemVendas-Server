@@ -16,9 +16,26 @@ const config = require('./src/routes/controller_config_ambiente');
 // SERVER
 
 const serverEngine = require('./src/managers/server_engine')
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const express = require("express");
+
+
+const flutter = path.join(__dirname, 'public-flutter');
+
+console.log(flutter);
+
 
 serverEngine.singleThread(true, 'portaOut',
     (app) => {
+
+        app.use(express.json());
+        app.use(express.urlencoded({ extended: false }));
+        app.use(cookieParser);
+        app.use(cors);
+        app.use(express.static(flutter));
+
         images.register(app);
         utility.register(app);
         historico.register(app);

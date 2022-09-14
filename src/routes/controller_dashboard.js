@@ -36,9 +36,6 @@ module.exports = {
      */
     register: (app) => {
 
-
-        // app.use('', cookieParser, cors, express.static('public-flutter'));
-
         // app.post('/dash/vendas/', async (req, res) => {
         //     dash.getVendedorVendas(req, res);
         // });
@@ -56,7 +53,8 @@ module.exports = {
 
         app.post('/dash/status/pedido/', seguranca.checkDevice, bodyCheck, validation_form, statusPedido.selectData);
 
-        app.post('/dash/meta/vendedor/', seguranca.checkDevice, bodyCheck, validation_form, metaVendedor.selectData);
+        // app.post('/dash/meta/vendedor/', seguranca.checkDevice, bodyCheck, validation_form, metaVendedor.selectData);
+        app.post('/dash/meta/vendedor/', validation_form, metaVendedor.selectData);
 
     }
 

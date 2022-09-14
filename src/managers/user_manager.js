@@ -65,10 +65,7 @@ module.exports = {
                 }
 
             }
-            socket.on('close', function () {
-                console.log('closing', socketManager.length)
-                socketManager = socketManager.filter(s => s !== socket);
-            });
+
 
         }
         wss.on('connection', event);
@@ -89,10 +86,7 @@ module.exports = {
      */
     sendData: (msg) => {
         let data = JSON.stringify(msg)
-        console.log(`Call at ${process.pid}`);
-
         socketManager.forEach(s => {
-            console.log('test')
             s.send(data)
 
         });

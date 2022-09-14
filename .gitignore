@@ -141,6 +141,7 @@ dist
 /ambientes/
 /database_update/
 /versions/
+/public-flutter/
 
 server.exe
 image.exe
