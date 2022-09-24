@@ -280,9 +280,7 @@ async function getViewData(db, viewName, sql, param) {
 
     return await new Promise((resolve, reject) => {
 
-        query.simple2(db, viewName, sql, err => {
-            reject(err);
-        }, (err, resultSet) => {
+        query.withConn(db, viewName, sql, (err, resultSet) => {
             if (err) {
                 reject(err);
                 return;

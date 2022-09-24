@@ -13,6 +13,14 @@ const visita = require('./src/routes/controller_visita')
 const dash = require('./src/routes/controller_dashboard')
 const config = require('./src/routes/controller_config_ambiente');
 
+
+// Web
+
+// const webMeta = require('./src/routes/web/controller_web_meta')
+const webMetaGenrenciar = require('./src/routes/web/controller_web_meta_gerenciar')
+const webUtil = require('./src/routes/web/controller_web_util')
+
+
 // SERVER
 
 const serverEngine = require('./src/managers/server_engine')
@@ -21,39 +29,40 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require("express");
 
-
 const flutter = path.join(__dirname, 'public-flutter');
 
 console.log(flutter);
 
+/**
+ * @param req {Request}
+ */
+function debug(req, res, n) {
+    console.log('request', req.path)
+    n();
+}
 
-serverEngine.singleThread(true, 'portaOut',
-    (app) => {
+serverEngine.singleThread(true, 'portaOut', (app) => {
 
-        app.use(express.json());
-        app.use(express.urlencoded({ extended: false }));
-        app.use(cookieParser);
-        app.use(cors);
-        app.use(express.static(flutter));
+    app.use(debug)
+    app.use(express.static(path.join(__dirname, 'public-flutter')));
 
-        images.register(app);
-        utility.register(app);
-        historico.register(app);
-        user.register(app);
-        views.register(app);
-        cliente.register(app)
-        venda.register(app);
-        visita.register(app);
-        config.register(app);
-        dash.register(app);
-    }, () => {
-        console.log('--------------------------------------------------------')
-        console.log('\n' +
-            '    ______      ____   _____                          \n' +
-            '   / ____/_  __/ / /  / ___/___  ______   _____  _____\n' +
-            '  / /_  / / / / / /   \\__ \\/ _ \\/ ___/ | / / _ \\/ ___/\n' +
-            ' / __/ / /_/ / / /   ___/ /  __/ /   | |/ /  __/ /    \n' +
-            '/_/    \\__,_/_/_/   /____/\\___/_/    |___/\\___/_/     \n' +
-            '                                                      \n')
-        console.log('--------------------------------------------------------')
-    });
+    images.register(app);
+    utility.register(app);
+    historico.register(app);
+    user.register(app);
+    views.register(app);
+    cliente.register(app)
+    venda.register(app);
+    visita.register(app);
+    config.register(app);
+    dash.register(app);
+
+
+    webMetaGenrenciar.register(app)
+    webUtil.register(app)
+
+}, () => {
+    console.log('--------------------------------------------------------')
+    console.log('\n' + '    ______      ____   _____                          \n' + '   / ____/_  __/ / /  / ___/___  ______   _____  _____\n' + '  / /_  / / / / / /   \\__ \\/ _ \\/ ___/ | / / _ \\/ ___/\n' + ' / __/ / /_/ / / /   ___/ /  __/ /   | |/ /  __/ /    \n' + '/_/    \\__,_/_/_/   /____/\\___/_/    |___/\\___/_/     \n' + '                                                      \n')
+    console.log('--------------------------------------------------------')
+});

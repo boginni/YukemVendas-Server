@@ -30,8 +30,8 @@ module.exports = {
             })
         })
 
-        if(header == undefined){
-            header = {'ID_META' : 0};
+        if (header == undefined) {
+            header = {'ID_META': 0};
         }
 
 
@@ -50,7 +50,7 @@ module.exports = {
 
                 res.send(resultSet);
             },
-            req.body['id_vendedor'], header['ID_META']
+            [req.body['id_vendedor'], header['ID_META']]
         )
     }
 

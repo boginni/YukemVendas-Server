@@ -47,14 +47,11 @@ module.exports = {
 
 
                     },
-                    req.body['id_vendedor'], req.body['data_inicio'], req.body['data_fim']
+                    [req.body['id_vendedor'], req.body['data_inicio'], req.body['data_fim']]
                 )
 
-                //
-
-
             },
-            req.body['id_vendedor'], req.body['data_inicio'], req.body['data_fim']
+            [req.body['id_vendedor'], req.body['data_inicio'], req.body['data_fim']]
         )
 
     }
