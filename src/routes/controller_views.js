@@ -13,7 +13,7 @@ module.exports = {
     register: (app) => {
 
         app.post('/view/ping', async (req, res) => {
-            res.end('ok');
+            res.end('1');
         });
 
         app.post('/view/buffed', seguranca.checkDevice, daoView.getViewContent);

@@ -173,6 +173,9 @@ module.exports = {
                 let currentTime = timeUtility.getTimeStamp();
 
                 for (let view in normalViews) {
+
+                    console.log(view);
+
                     if (allowedViews[view]) {
 
                         // language=SQL format=false
@@ -198,6 +201,7 @@ module.exports = {
 
                 if (vendedor !== null && vendedor !== undefined) for (let view of rotaViews) {
 
+                    console.log(view);
                     if (allowedViews[view]) {
                         // language=SQL format=false
                         let sql = `SELECT * FROM ${view} where RT_VENDEDOR = ? `;

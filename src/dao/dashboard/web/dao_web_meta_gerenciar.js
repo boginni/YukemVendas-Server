@@ -31,13 +31,15 @@ module.exports = {
 
             // language=SQL format=false
             const sql = `INSERT INTO DASH_META_VENDA 
-    (APELIDO, DIAS_UTEIS, DIAS_DECORRIDOS, DIAS_RESTANTES, DATA_INICIO, DATA_FIM, STATUS_ATIVO) 
-    VALUES (?, 1, 0, 0, '1-AUG-2022', '30-SEP-2022', 1);`;
-            let param = [req.body.apelido, // req.body.diasUteis,
-                // req.body.diasDecorridos,
+    (APELIDO, DIAS_UTEIS, DIAS_DECORRIDOS, DIAS_RESTANTES, DATA_INICIO, DATA_FIM) 
+    VALUES (?, ?, ?, 0, ?, ?);`;
+            let param = [
+                req.body.apelido,
+                req.body.diasUteis,
+                req.body.diasDecorridos,
                 // req.body.diasRestantes,
-                // req.body.dataInicio,
-                // req.body.dataFim,
+                req.body.dataInicio,
+                req.body.dataFim,
             ];
             query.basicQuery(getOptions(req.headers.ambiente), sql, param, res)
         },
