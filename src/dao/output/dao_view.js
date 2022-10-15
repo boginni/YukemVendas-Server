@@ -72,78 +72,7 @@ module.exports = {
 
     },
 
-    /**
-     * @param viewRequest {ViewRequest}
-     * @param req {Request}
-     * @param res {Response}
-     */
-    download: async (req, res) => {
-
-        let ambiente = req.headers.ambiente;
-        let options = serverConfig.getOptions(ambiente);
-
-        // SERVE PARA SABER SE O AMBIENTE É VÁLIDO
-        if (options == null) {
-            errors.invalido_ambiente(res);
-            return null;
-        }
-
-
-        // language=SQL format=false
-
-
-        let views = req.body.views;
-        // let param = req.body.last;
-        let param = [];
-
-        let result = {};
-
-        Firebird.attach(options, async function (err, db) {
-
-            if (err) {
-                errors.erro_interno_fb(res);
-                return;
-            }
-
-
-            for (const view of views) {
-
-                // language=SQL format=false
-                let sql = `SELECT * FROM ${view}`;
-
-                console.log(sql)
-
-                let resultSet = await new Promise((resolve, reject) => {
-                    db.query(sql, param, function (err, result) {
-                        // IMPORTANT: close the connection
-                        if (err) {
-                            resolve(err)
-                            return;
-                        }
-                        resolve(result)
-                    });
-                });
-
-
-                result[view] = resultSet;
-
-            }
-
-            db.detach();
-            saveZipSend(result, ambiente, 'old.gz', res)
-
-
-            // res.send(result)
-
-        })
-    },
-
     getViewContent: async (req, res) => {
-
-        // send('./files/altogiro/sync/views-4502.gz', res);
-        // return;
-
-        // console.log(req.body)
 
         try {
 
