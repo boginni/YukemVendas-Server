@@ -11,15 +11,7 @@ const venda = require('./src/routes/controller_venda');
 const visita = require('./src/routes/controller_visita')
 // Painel
 const dash = require('./src/routes/controller_dashboard')
-const config = require('./src/routes/controller_config_ambiente');
-
-
-// Web
-
-// const webMeta = require('./src/routes/web/controller_web_meta')
-const webMetaGenrenciar = require('./src/routes/web/controller_web_meta_gerenciar')
-const webUtil = require('./src/routes/web/controller_web_util')
-
+// const config = require('./src/routes/controller_config_ambiente');
 
 // SERVER
 
@@ -54,12 +46,7 @@ serverEngine.singleThread(true, 'portaOut', (app) => {
     cliente.register(app)
     venda.register(app);
     visita.register(app);
-    config.register(app);
     dash.register(app);
-
-
-    webMetaGenrenciar.register(app)
-    webUtil.register(app)
 
 }, () => {
     console.log('--------------------------------------------------------')

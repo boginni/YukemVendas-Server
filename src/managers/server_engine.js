@@ -177,8 +177,8 @@ module.exports = {
 
             console.log(e)
 
-            // config.validateServer();
-            // config.createFile();
+            config.validateServer();
+            config.createFile();
         }
 
 
