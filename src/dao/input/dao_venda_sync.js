@@ -73,10 +73,18 @@ module.exports = {
                         ret.cab.id = vendaResponse;
 
                         if (ret.cab.id != null) {
-                            // insere os Produtos do pedido
+
                             for (let j = 0; j < venda.det.length; j++) {
                                 venda.det[j].ID_VENDEDOR = venda.cab.idvendedor;
                                 let item = await insertVendaDet(transaction, ret.cab.id, venda.det[j]);
+
+                                if (item == null) {
+                                    resolve(false);
+                                    transaction.rollback();
+                                    return;
+                                }
+
+
                                 ret.det.push(item);
                             }
 
@@ -95,9 +103,8 @@ module.exports = {
                     })
                 })
 
-                if (vendaInserida) {
+                if (vendaInserida === true) {
                     logSaveVenda(venda, req.headers.ambiente);
-                    // await verificaVenda(db, ret.cab.id);
                     retList[venda.cab.uuid] = ret.cab.id;
                 }
 
@@ -211,18 +218,15 @@ async function insertVendaCab(db, cab) {
 async function insertVendaDet(db, idPedido, det) {
     return await new Promise((resolve) => {
 
-         //          (UUID, ID_PEDIDO, ID_PRODUTO, STATUS_BRINDE, QUANTIDADE, VALOR_UNITARIO, VALOR_DESCONTO)
+        //          (UUID, ID_PEDIDO, ID_PRODUTO, STATUS_BRINDE, QUANTIDADE, VALOR_UNITARIO, VALOR_DESCONTO)
 
         let param = ['', idPedido, det.ID_PRODUTO, det.A_BRINDE, det.QUANTIDADE, det.VALOR_UNITARIO, det.VALOR_DESCONTO];
 
         db.query(sqlDet, param, function (err, result) {
 
             if (err) {
-
                 console.log(err);
-                errors.erro_interno_query(res);
-                return resolve();
-
+                return resolve(null);
             }
             resolve(result['ID']);
 

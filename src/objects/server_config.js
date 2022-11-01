@@ -1,8 +1,6 @@
 class ServerConfig {
     servidor
-    portaOut
-    portaIn
-    portaDash
+    porta
     /**
      * @type FirebirdConfig[]
      */

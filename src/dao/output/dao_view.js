@@ -10,6 +10,7 @@ const fs = require('fs');
 const zlib = require('zlib');
 const e = require("express");
 const {timeUtility} = require("../../common/utility");
+const {debugMode} = require("../../managers/server_controller");
 
 
 let lastFileIndex = 0;
@@ -89,10 +90,7 @@ module.exports = {
             let rota = req.body.rota;
             let vendedor = req.body.vendedor;
 
-
-            // console.log(req.body)
-
-            console.log(`(${vendedor}) - View Request`)
+            console.log(`[${ambiente}][${vendedor}] - View Request`)
 
             Firebird.attach(options, async (err, db) => {
 
@@ -103,7 +101,9 @@ module.exports = {
 
                 for (let view in normalViews) {
 
-                    console.log(view);
+                    if (debugMode()) {
+                        console.log(view)
+                    }
 
                     if (allowedViews[view]) {
 
@@ -130,7 +130,10 @@ module.exports = {
 
                 if (vendedor !== null && vendedor !== undefined) for (let view of rotaViews) {
 
-                    console.log(view);
+                    if (debugMode()) {
+                        console.log(view)
+                    }
+
                     if (allowedViews[view]) {
                         // language=SQL format=false
                         let sql = `SELECT * FROM ${view} where RT_VENDEDOR = ? `;
@@ -156,7 +159,14 @@ module.exports = {
                 };
 
                 db.detach();
-                saveZipSend(result, ambiente, `views-${vendedor}.gz`, res)
+
+                let file = `views-${vendedor}.gz`;
+
+                if (debugMode) {
+                    console.log('salvando request ', file)
+                }
+
+                saveZipSend(result, ambiente, file, res)
             })
 
         } catch (e) {

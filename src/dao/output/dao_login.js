@@ -6,6 +6,7 @@ const seguranca = require('../../middleware/seguranca');
 const userManager = require('../../managers/user_manager');
 
 const crypto = require('crypto');
+const {debugMode} = require("../../managers/server_controller");
 
 let sql = 'SELECT * FROM MOB_SP_YK_LOGIN(?, ?);';
 
@@ -22,6 +23,10 @@ module.exports = {
         const pass = req.body.pass;
         const device = req.headers.device;
         let ip = req.ip;
+
+        if(debugMode()){
+            console.log(`login - [${ip}][${amb}][${usuario}]`)
+        }
 
         const options = ambiente.getOptions(amb);
 
@@ -43,6 +48,7 @@ module.exports = {
             }
 
             db.query(sql, [usuario, hash], function (err, result) {
+
                 // IMPORTANT: close the connection
                 db.detach();
 
@@ -66,8 +72,6 @@ module.exports = {
                  *
                  * @type {Credencial}
                  */
-
-                    // JSON SIMPLES DE CONTROLE
                 let user = {};
 
                 user.ambiente = amb;
@@ -75,13 +79,15 @@ module.exports = {
                 user.idVendedor = response.ID_VENDEDOR;
                 user.lastUUID = response.LAST_UUID;
                 user.ip = ip;
-                user.device = device//response.codigo_dispositivo;
-                // seguranca.checkDevice(user, res);
+                user.device = device;
+
 
                 userManager.addUser(user);
                 daoIp.saveIp(user, res);
 
-                response.port = ambiente.getServerConfig().portaIn;
+                response.port = ambiente.getServerConfig().porta;
+
+                console.log(response)
 
                 res.send(JSON.stringify(response));
             });

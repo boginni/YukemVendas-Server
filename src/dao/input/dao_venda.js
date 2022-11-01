@@ -76,11 +76,19 @@ module.exports = {
 
                         ret.cab.id = vendaResponse;
 
+
                         if (ret.cab.id != null) {
                             // insere os Produtos do pedido
                             for (let j = 0; j < venda.det.length; j++) {
                                 venda.det[j].ID_VENDEDOR = venda.cab.idvendedor;
                                 let item = await insertVendaDet(transaction, ret.cab.id, venda.det[j]);
+
+                                if (item == null) {
+                                    transaction.rollback();
+                                    resolve(false);
+                                    return;
+                                }
+
                                 ret.det.push(item);
                             }
 
@@ -200,6 +208,7 @@ async function insertVendaDet(db, idPedido, det) {
                 errors.erro_interno_query(res);
                 resolve();
             }
+
             resolve(result[0]);
 
         });

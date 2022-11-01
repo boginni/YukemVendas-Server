@@ -39,9 +39,6 @@ module.exports = {
      */
     initIWebsocketServer: (server) => {
 
-
-
-
         let wss = new WebSocket.Server({server: server})
         /**
          * @param socket {WebSocket}
@@ -49,7 +46,7 @@ module.exports = {
         let event = function (socket) {
 
             // socketManager.push(socket);
-
+            //
             // socket.on('message', function (msg) {
             //     socketManager.forEach(s => s.send(msg));
             // });
@@ -58,7 +55,6 @@ module.exports = {
 
                 try {
                     webEvent(JSON.parse(msg.data), socket)
-
                 } catch (e) {
                     console.log('invalid json');
                     console.log(msg.data);
@@ -68,6 +64,7 @@ module.exports = {
 
 
         }
+
         wss.on('connection', event);
 
     },
@@ -88,7 +85,6 @@ module.exports = {
         let data = JSON.stringify(msg)
         socketManager.forEach(s => {
             s.send(data)
-
         });
     }
 
@@ -102,6 +98,7 @@ module.exports = {
 function webEvent(msg, socket) {
 
     let evn = msg.name;
+
 
     switch (evn) {
         case 'register':

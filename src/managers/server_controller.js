@@ -1,6 +1,9 @@
 const fs = require("fs");
 const confFile = require('../objects/config_file')
 
+
+var debugMode = false;
+
 /**
  * @type ServerConfig
  */
@@ -24,6 +27,15 @@ function setServerConfig(variable) {
 }
 
 module.exports = {
+
+    debugMode: () => {
+        return debugMode;
+    },
+
+    setDebugMode: (x) => {
+        debugMode = x;
+    },
+
 
     /**
      * @param ambiente {string}
@@ -93,7 +105,7 @@ module.exports = {
     createFile: () => {
 
         let file = new confFile.configFile();
-        file.ambientes.push(new confFile.firebirdConfig())
+        file.ambientes.push(new confFile.FirebirdConfig())
 
         fs.writeFile('./config/config.json', JSON.stringify(file, null, 4), function (err) {
             if (err) throw err;

@@ -1,9 +1,7 @@
 class ConfigFile {
     servidor = 'localhost';
-    porta;
-    portaOut = 11002;
-    portaIn = 11004;
-    portaDash = 11006;
+    porta = 11002;
+    debug = true;
     /**
      * @type FirebirdConfig[]
      */
@@ -22,7 +20,7 @@ class FirebirdConfig {
 }
 
 module.exports = {
-    configFile : ConfigFile,
-    firebirdConfig : FirebirdConfig
+    configFile: ConfigFile,
+    FirebirdConfig: FirebirdConfig
 };
 

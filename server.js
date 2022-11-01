@@ -13,13 +13,9 @@ const visita = require('./src/routes/controller_visita')
 const dash = require('./src/routes/controller_dashboard')
 const config = require('./src/routes/controller_config_ambiente');
 
-
-// Web
-
 // const webMeta = require('./src/routes/web/controller_web_meta')
-const webMetaGenrenciar = require('./src/routes/web/controller_web_meta_gerenciar')
-const webUtil = require('./src/routes/web/controller_web_util')
-
+// const webMetaGenrenciar = require('./src/routes/web/controller_web_meta_gerenciar')
+// const webUtil = require('./src/routes/web/controller_web_util')
 
 // SERVER
 
@@ -28,6 +24,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const express = require("express");
+const {debugMode} = require("./src/managers/server_controller");
 
 const flutter = path.join(__dirname, 'public-flutter');
 
@@ -41,28 +38,36 @@ function debug(req, res, n) {
     n();
 }
 
-serverEngine.singleThread(true, 'portaOut', (app) => {
+serverEngine.singleThread(true, 'porta', (app) => {
 
-    app.use(debug)
+    if(debugMode()){
+        app.use(debug)
+    }
+
     app.use(express.static(path.join(__dirname, 'public-flutter')));
 
     images.register(app);
     utility.register(app);
     historico.register(app);
     user.register(app);
-    views.register(app);
+
+    app.use('/view', views);
+
     cliente.register(app)
     venda.register(app);
     visita.register(app);
     config.register(app);
     dash.register(app);
 
-
-    webMetaGenrenciar.register(app)
-    webUtil.register(app)
-
 }, () => {
     console.log('--------------------------------------------------------')
     console.log('\n' + '    ______      ____   _____                          \n' + '   / ____/_  __/ / /  / ___/___  ______   _____  _____\n' + '  / /_  / / / / / /   \\__ \\/ _ \\/ ___/ | / / _ \\/ ___/\n' + ' / __/ / /_/ / / /   ___/ /  __/ /   | |/ /  __/ /    \n' + '/_/    \\__,_/_/_/   /____/\\___/_/    |___/\\___/_/     \n' + '                                                      \n')
     console.log('--------------------------------------------------------')
 });
+
+
+
+
+
+
+

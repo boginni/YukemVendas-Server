@@ -58,6 +58,20 @@ let reqCheck = [
 ];
 
 
+// let reqCheck = [
+//     header('ambiente')
+//         .exists()
+//         .isLength({min: 1, max: 100}),
+//     header('idvendedor')
+//         .exists()
+//         .isNumeric(),
+//     // header('device')
+//     //     .exists(),
+//     header('uuid')
+//         .exists(),
+//     // header('ip'),
+// ];
+
 
 module.exports = {
 

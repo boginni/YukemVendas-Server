@@ -58,7 +58,6 @@ module.exports = {
                         return console.log('Error : ', err);
 
                     evtmgr.on('post_event', function (name, count) {
-
                         events_amb[ambiente][name] = true;
                     })
 
@@ -86,6 +85,7 @@ module.exports = {
 
 
         setInterval(function () {
+
 
 
             let map = new Map();
@@ -121,10 +121,9 @@ module.exports = {
                 msg.data = map;
                 // 'event
 
-
                 console.log(`eventos atirados: ${JSON.stringify(map)}`);
-
                 userManager.sendData(msg);
+
             }
 
 
