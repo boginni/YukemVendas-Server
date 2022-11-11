@@ -15,14 +15,8 @@ module.exports = {
 
 
         let headers = req.headers;
-
-        // VALIDAÇÃO DE AMBIENTE
         let options = ambiente.getOptions(headers.ambiente);
-
-        // SERVE PARA VERIFICAR SE O AMBIENTE É VÁLIDO
-
         let visitaList = req.body;
-
         if (visitaList.length == null || visitaList.empty) {
             res.sendStatus(200)
             return null;
@@ -30,13 +24,13 @@ module.exports = {
 
         let retList = [];
 
-        // ACESSO AO BANCO DE DADOS
         Firebird.attach(options, async function (err, db) {
-            // ERRO INTERNO FB
+
             if (err) {
                 errors.erro_interno_fb(res)
                 return;
             }
+
             for (let visita of visitaList) {
 
                 let params = [
@@ -50,26 +44,51 @@ module.exports = {
                     visita.OBSERVACAO_CANCELAMENTO
                 ]
 
-                // console.log(visita)
+                let exists = await new Promise(resolve => {
+                    db.query(sqlQuery, [visita.UUID], (err, result) => {
+                        if (err) {
+                            return;
+                        }
 
-                db.query(sql, params, (err) => {
-                    if (err) {
-                        return;
-                    }
+                        if (result.length > 0) {
+                            resolve(true);
+                            return
 
+                        }
+
+                        resolve(false);
+                    })
+                });
+
+                if (!exists) {
+                    await new Promise(resolve => {
+                        db.query(sqlInsert, params, (err) => {
+                            if (err) {
+                                return;
+                            }
+
+                            retList.push(visita.UUID);
+                            resolve()
+                        })
+                    });
+                } else {
                     retList.push(visita.UUID);
-
-                })
+                }
 
 
             }
-
             db.detach()
 
-            // res.sendStatus(200)
+            res.status(200)
             res.send(retList)
         })
     }
 }
 
-let sql = 'INSERT INTO MOB_VISITA (ID_EMPRESA, UUID, ID_CLIENTE, ID_VENDEDOR, ID_ROTA, ID_CANCELAMENTO,     ID_BASE_CAB, DATA_CHEGADA, OBSERVACAO_CANCELAMENTO) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?);'
+let sqlInsert = 'INSERT INTO MOB_VISITA (ID_EMPRESA, UUID, ID_CLIENTE, ID_VENDEDOR, ID_ROTA, ID_CANCELAMENTO,     ID_BASE_CAB, DATA_CHEGADA, OBSERVACAO_CANCELAMENTO) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?);'
+
+
+let sqlQuery = 'select * from mob_visita a where a.uuid = ?'
+
+
+

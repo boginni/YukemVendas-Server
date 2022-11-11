@@ -33,11 +33,6 @@ module.exports = {
             return null;
         }
 
-        if (!(await seguranca.checkDevice(req.headers))) {
-            errors.acesso_negado(res);
-            return null;
-        }
-
         let param = [];
         let historico = historicoPedido;
         param = [historico.pessoas];

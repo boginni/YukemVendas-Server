@@ -34,7 +34,7 @@ module.exports = {
 
         app.post('/dash/status/pedido/', seguranca.checkDevice, bodyCheck, validation_form, statusPedido.selectData);
 
-        // app.post('/dash/meta/vendedor/', validation_form, metaVendedor.selectData);
+        app.post('/dash/meta/vendedor/', validation_form, metaVendedor.selectData);
 
     }
 
