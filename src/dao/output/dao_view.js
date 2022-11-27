@@ -286,6 +286,7 @@ allowedViews["MOB_VW_MOTIVO_CANCELAMENTO"] = true;
 allowedViews["MOB_VW_BLOQUEIO_PG_TIPO"] = true;
 allowedViews["MOB_VW_CLIENTE_TIPO"] = true;
 allowedViews["MOB_VW_CONF_AMBIENTE_USER"] = true;
+allowedViews["MOB_VW_VENDEDOR_TABELA"] = true;
 //
 allowedViews["MOB_VW_COMODATO_CAB_ROTA"] = false;
 allowedViews["MOB_VW_COMODATO_DET_ROTA"] = false;

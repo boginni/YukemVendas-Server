@@ -31,13 +31,23 @@ module.exports = {
                 return;
             }
 
+            console.log('log visita');
+            console.log(visitaList);
+
             for (let visita of visitaList) {
+
+                let rota = visita.ID_ROTA;
+
+                if (rota == 0) {
+                    rota = null;
+                }
+
 
                 let params = [
                     visita.UUID,
                     visita.ID_CLIENTE,
                     visita.ID_VENDEDOR,
-                    visita.ID_ROTA,
+                    rota,
                     visita.ID_CANCELAMENTO,
                     visita.ID_BASE_CAB,
                     visita.DATA_CHEGADA,
@@ -53,33 +63,38 @@ module.exports = {
                         if (result.length > 0) {
                             resolve(true);
                             return
-
                         }
 
                         resolve(false);
                     })
                 });
 
+
                 if (!exists) {
                     await new Promise(resolve => {
                         db.query(sqlInsert, params, (err) => {
                             if (err) {
-                                return;
+                                console.log(err)
+                                throw 'sql error'
                             }
 
                             retList.push(visita.UUID);
-                            resolve()
+                            return resolve()
                         })
                     });
                 } else {
                     retList.push(visita.UUID);
                 }
 
-
             }
-            db.detach()
 
+            db.detach()
             res.status(200)
+
+
+            console.log('sending results');
+            console.log(retList);
+
             res.send(retList)
         })
     }

@@ -11,6 +11,7 @@ module.exports = {
      * @param res {Response}
      */
     selectData: async (req, res) => {
+
         res.status(200);
 
         let options = getOptions(req.headers.ambiente)
@@ -30,10 +31,13 @@ module.exports = {
                     } catch (e) {
                         reject();
                     }
+
+
                 })
-
-
             })
+
+
+
 
             if (header == undefined) {
                 header = {'ID_META': 0};
@@ -53,6 +57,9 @@ module.exports = {
                             return;
                         }
                         resultSet['header'] = header;
+
+                        console.log(resultSet)
+
                         res.send(resultSet);
                     },
                     [req.body['id_vendedor'], header['ID_META']]

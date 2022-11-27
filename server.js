@@ -28,8 +28,6 @@ const {debugMode} = require("./src/managers/server_controller");
 
 const flutter = path.join(__dirname, 'public-flutter');
 
-console.log(flutter);
-
 /**
  * @param req {Request}
  */
@@ -44,7 +42,7 @@ serverEngine.singleThread(true, 'porta', (app) => {
         app.use(debug)
     }
 
-    app.use(express.static(path.join(__dirname, 'public-flutter')));
+    app.use(express.static(flutter));
 
     images.register(app);
     utility.register(app);
@@ -63,6 +61,7 @@ serverEngine.singleThread(true, 'porta', (app) => {
     console.log('--------------------------------------------------------')
     console.log('\n' + '    ______      ____   _____                          \n' + '   / ____/_  __/ / /  / ___/___  ______   _____  _____\n' + '  / /_  / / / / / /   \\__ \\/ _ \\/ ___/ | / / _ \\/ ___/\n' + ' / __/ / /_/ / / /   ___/ /  __/ /   | |/ /  __/ /    \n' + '/_/    \\__,_/_/_/   /____/\\___/_/    |___/\\___/_/     \n' + '                                                      \n')
     console.log('--------------------------------------------------------')
+    console.log('Versão 1.4.38b')
 });
 
 
